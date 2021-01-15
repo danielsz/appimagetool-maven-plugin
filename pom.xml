@@ -15,24 +15,24 @@
 
   <issueManagement>
     <system>GitHub</system>
-    <url>https://bitbucket.org/danielsz/imagetool-maven-plugin/</url>
+    <url>https://github.com/danielsz/appimagetool-maven-plugin/issues</url>
   </issueManagement>
 
   <licenses>
     <license>
       <name>Eclipse Public License 2.0</name>
-      <url>https://bitbucket.org/danielsz/imagetool-maven-plugin/blob/master/LICENSE</url>
+      <url>https://github.com/danielsz/appimagetool-maven-plugin/blob/master/LICENSE</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
 
   <scm>
-    <url>https://bitbucket.org/danielsz/imagetool-maven-plugin/</url>
+    <url>https://github.com/danielsz/appimagetool-maven-plugin/</url>
     <connection>
-      scm:git:git://bitbucket.org/danielsz/imagetool-maven-plugin.git
+      scm:git:git://github.com/danielsz/appimagetool-maven-plugin.git
     </connection>
     <developerConnection>
-      scm:git:ssh://git@bitbucket.org:danielsz/imagetool-maven-plugin.git
+      scm:git:ssh://git@github.com:danielsz/appimagetool-maven-plugin.git
     </developerConnection>
   </scm>
   <developers>
