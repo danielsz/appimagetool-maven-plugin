@@ -35,7 +35,8 @@
     (io/copy (io/file (str (System/getProperty "user.dir") "/" path)) (io/file (str output "/" project ".png")))))
 
 (defn make-app-image [output]
-  (let [pb (ProcessBuilder. ["/usr/bin/appimagetool" (str output)])]
+  (let [pb (ProcessBuilder. ["/usr/bin/appimagetool" (.getName output)])]
+    (.directory pb (.getParentFile output))
     (.waitFor (-> pb .inheritIO .start))))
 
 (defn jpackage->imagetool [input output]

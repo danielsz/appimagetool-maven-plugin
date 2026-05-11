@@ -4,7 +4,7 @@
   <groupId>org.meyvn</groupId>
   <artifactId>appimagetool-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>1.0.0</version>
+  <version>1.0.2</version>
   <name>appimagetool-maven-plugin Maven Mojo</name>
   <url>https://meyvn.org</url>
   <description>Will take jpackage output and use it as input for appimagetool</description>
@@ -78,41 +78,71 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-plugin-plugin</artifactId>
-        <version>3.6.0</version>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-source-plugin</artifactId>
+	<version>3.3.1</version>
+	<executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+	</executions>
       </plugin>
+
       <plugin>
 	<groupId>org.apache.maven.plugins</groupId>
 	<artifactId>maven-javadoc-plugin</artifactId>
-	<configuration>
-	  <javadocExecutable>/usr/bin</javadocExecutable>
-	</configuration>
+	<version>3.6.3</version>
 	<executions>
-	  <execution>
-	    <id>attach-javadocs</id>
-	    <goals>
-	      <goal>jar</goal>
-	    </goals>
-	  </execution>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
 	</executions>
       </plugin>
+      
       <plugin>
-	<groupId>org.apache.maven.plugins</groupId>
-	<artifactId>maven-source-plugin</artifactId>
-	<executions>
-	  <execution>
-	    <id>attach-sources</id>
-	    <goals>
-              <goal>jar</goal>
-	    </goals>
-	  </execution>
-	</executions>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <version>3.9.0</version>
+        <configuration>
+          <!-- <goalPrefix>maven-archetype-plugin</goalPrefix> -->
+          <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
+        </configuration>
+        <executions>
+          <execution>
+            <id>mojo-descriptor</id>
+            <goals>
+              <goal>descriptor</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>help-goal</id>
+            <goals>
+              <goal>helpmojo</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.sonatype.central</groupId>
+        <artifactId>central-publishing-maven-plugin</artifactId>
+        <version>0.8.0</version>
+        <extensions>true</extensions>
+        <configuration>
+          <publishingServerId>central</publishingServerId>
+	  <autoPublish>true</autoPublish>
+          <waitUntil>published</waitUntil>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
-        <version>1.6</version>
+        <version>3.1.0</version>
         <executions>
           <execution>
             <id>sign-artifacts</id>
@@ -120,26 +150,20 @@
             <goals>
               <goal>sign</goal>
             </goals>
-          </execution>
+	    <configuration>
+              <!-- Use the key ID or a property that defines it -->
+              <keyname>BA33576B24FF371BE0245E3ED2DD64F0A30E1DD6</keyname>
+            </configuration>
+          </execution>	  
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.sonatype.plugins</groupId>
-        <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>1.6.8</version>
-        <extensions>true</extensions>
-        <configuration>
-          <serverId>oss</serverId>
-          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-          <autoReleaseAfterClose>true</autoReleaseAfterClose>
-        </configuration>
-      </plugin>
     </plugins>
-      <resources>
-	<resource>
-	  <directory>src/main/clojure</directory>
-	</resource>
-      </resources>    
+
+    <resources>
+      <resource>
+	<directory>src/main/clojure</directory>
+      </resource>
+    </resources>    
   </build>
   
   <distributionManagement>

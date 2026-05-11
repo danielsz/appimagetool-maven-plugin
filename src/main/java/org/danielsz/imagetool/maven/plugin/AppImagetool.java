@@ -48,14 +48,21 @@ public class AppImagetool extends AbstractMojo {
      */
     @Parameter(defaultValue = "${project.build.directory}/jpackage", property = "imagetool.inputDirectory", required = true)
     private File inputDirectory;
-    
+
+    @Parameter(defaultValue = "true", property = "appimage.enabled", required = false)
+    private boolean enabled;
     /**
      *
      * @throws MojoExecutionException
      */
     @Override
     public void execute() throws MojoExecutionException {
-        getLog().info( "input directory" + inputDirectory);
+	if (!enabled) {
+	    getLog().info("AppImage creation is disabled, skipping.");
+	    return;
+	}
+
+	getLog().info( "input directory" + inputDirectory);
         getLog().info( "output directory" + outputDirectory);
 
 	IFn require = Clojure.var("clojure.core", "require");
