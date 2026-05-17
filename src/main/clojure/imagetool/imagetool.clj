@@ -24,9 +24,9 @@
         (Files/copy (.toPath file) destination-path (into-array CopyOption [StandardCopyOption/COPY_ATTRIBUTES]))
         (catch FileAlreadyExistsException e)))))
 
-(defn write-desktop-file [edn project output]
+(defn write-desktop-file [edn project version output]
   (let [desktop (get-in edn [:packaging :uberjar :appimage :desktop])
-        lines (-> ["[Desktop Entry]" (str "Name=" project) (str "Exec=" project) (str "Icon=" project)]
+        lines (-> ["[Desktop Entry]" (str "Name=" project) (str "Exec=" project) (str "Icon=" project) (str "X-AppImage-Version=" version)]
                  (conj (str/join (for [[k v] desktop] (str (str/capitalize (name k)) "=" v "\n")))))]
     (spit (str output "/" project ".desktop") (str/join \newline lines))))
 
@@ -34,15 +34,17 @@
   (let [path (get-in edn [:packaging :uberjar :appimage :icon])]
     (io/copy (io/file (str (System/getProperty "user.dir") "/" path)) (io/file (str output "/" project ".png")))))
 
-(defn make-app-image [output]
+(defn make-app-image [output version]
   (let [pb (ProcessBuilder. ["/usr/bin/appimagetool" (.getName output)])]
     (.directory pb (.getParentFile output))
+    (-> pb .environment (.put "VERSION" version))
     (.waitFor (-> pb .inheritIO .start))))
 
 (defn jpackage->imagetool [input output]
   (println "input: " input "\noutput: " output)
   (let [edn (read-string (slurp "meyvn.edn"))
         project (get-in edn [:pom :artifact-id])
+        version (get-in edn [:pom :version])
         input (io/file (str input "/" project))
         output (io/file (str output "/" project ".AppDir"))]
     (println "copying files....")
@@ -50,8 +52,8 @@
     (println "creating symbolic link")
     (create-symbolic-link output project)
     (println "writing desktop file")
-    (write-desktop-file edn project output)
+    (write-desktop-file edn project version output)
     (println "copying icon file")
     (copy-icon-file edn project output)
     (println "producing app image")
-    (make-app-image output)))
+    (make-app-image output version)))

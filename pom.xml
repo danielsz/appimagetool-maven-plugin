@@ -4,7 +4,7 @@
   <groupId>org.meyvn</groupId>
   <artifactId>appimagetool-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>1.0.2</version>
+  <version>1.0.3</version>
   <name>appimagetool-maven-plugin Maven Mojo</name>
   <url>https://meyvn.org</url>
   <description>Will take jpackage output and use it as input for appimagetool</description>
@@ -56,6 +56,7 @@
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-plugin-api</artifactId>
       <version>3.6.3</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.clojure</groupId>
